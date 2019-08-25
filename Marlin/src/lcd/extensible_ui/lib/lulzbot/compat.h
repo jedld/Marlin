@@ -26,8 +26,8 @@
  * as a part of Marlin or outside it
  */
 
-#ifdef __has_include
-  #if __has_include("../../ui_api.h")
+#if defined __has_include
+  #if __has_include ("../../ui_api.h")
     #include "../../ui_api.h"
   #endif
 #else
@@ -35,13 +35,21 @@
 #endif
 
 #ifdef __MARLIN_FIRMWARE__
-  // __MARLIN_FIRMWARE__ exists when compiled within Marlin.
-  #include "pin_mappings.h"
+    // If __MARLIN_FIRMWARE__ exists, then we are being
+    // compiled inside Marlin.
+    #include "pin_mappings.h"
 #else
   // Messages that are declared in Marlin
-  #define WELCOME_MSG        "Printer Ready"
-  #define MSG_MEDIA_INSERTED "Media Inserted"
-  #define MSG_MEDIA_REMOVED  "Media Removed"
+  #define WELCOME_MSG     "Printer Ready"
+  #define MSG_SD_INSERTED "Media Inserted"
+  #define MSG_SD_REMOVED  "Media Removed"
+
+  // Define macros for compatibility
+  #define EXTENSIBLE_UI
+  #define _CAT(a, ...) a ## __VA_ARGS__
+  #define SWITCH_ENABLED_      1
+  #define ENABLED(b) _CAT(SWITCH_ENABLED_, b)
+  #define DISABLED(b) !ENABLED(b)
 
   namespace UI {
     static inline uint32_t safe_millis() {return millis();};

@@ -45,7 +45,7 @@
   #error "Oops! Select 'Arduino/Genuino Mega or Mega 2560' in 'Tools > Board.'"
 #endif
 
-#define BOARD_INFO_NAME "Rambo"
+#define BOARD_NAME "Rambo"
 
 //
 // Servos
@@ -219,7 +219,7 @@
     // No Beeper added
     #define BEEPER_PIN     33
 
-    // Buttons attached to a shift register
+    // buttons are attached to a shift register
     // Not wired yet
     //#define SHIFT_CLK 38
     //#define SHIFT_LD 42

@@ -67,7 +67,6 @@
 // sk         Slovak
 // tr         Turkish
 // uk         Ukrainian
-// vi         Vietnamese
 // zh_CN      Chinese (Simplified)
 // zh_TW      Chinese (Traditional)
 

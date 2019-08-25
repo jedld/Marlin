@@ -60,7 +60,7 @@
   #include "../../libs/numtostr.h"
 #endif
 
-#if EXTRUDERS > 1
+#if DO_SWITCH_EXTRUDER || EITHER(SWITCHING_NOZZLE, PARKING_EXTRUDER)
   #include "../../module/tool_change.h"
 #endif
 
@@ -267,12 +267,8 @@ namespace ExtUI {
     return flags.manual_motion ? destination[axis] : current_position[axis];
   }
 
-  float getAxisPosition_mm(const extruder_t extruder) {
-    const extruder_t old_tool = getActiveTool();
-    setActiveTool(extruder, true);
-    const float pos = flags.manual_motion ? destination[E_AXIS] : current_position[E_AXIS];
-    setActiveTool(old_tool, true);
-    return pos;
+  float getAxisPosition_mm(const extruder_t) {
+    return flags.manual_motion ? destination[E_AXIS] : current_position[E_AXIS];
   }
 
   void setAxisPosition_mm(const float position, const axis_t axis) {
@@ -319,9 +315,6 @@ namespace ExtUI {
       }
     #endif
 
-    constexpr float max_manual_feedrate[XYZE] = MANUAL_FEEDRATE;
-    setFeedrate_mm_s(max_manual_feedrate[axis]);
-
     if (!flags.manual_motion) set_destination_from_current();
     destination[axis] = clamp(position, min, max);
     flags.manual_motion = true;
@@ -330,8 +323,6 @@ namespace ExtUI {
   void setAxisPosition_mm(const float position, const extruder_t extruder) {
     setActiveTool(extruder, true);
 
-    constexpr float max_manual_feedrate[XYZE] = MANUAL_FEEDRATE;
-    setFeedrate_mm_s(max_manual_feedrate[E_AXIS]);
     if (!flags.manual_motion) set_destination_from_current();
     destination[E_AXIS] = position;
     flags.manual_motion = true;
@@ -372,7 +363,9 @@ namespace ExtUI {
   void setActiveTool(const extruder_t extruder, bool no_move) {
     #if EXTRUDERS > 1
       const uint8_t e = extruder - E0;
-      if (e != active_extruder) tool_change(e, no_move);
+      #if DO_SWITCH_EXTRUDER || EITHER(SWITCHING_NOZZLE, PARKING_EXTRUDER)
+        if (e != active_extruder) tool_change(e, no_move);
+      #endif
       active_extruder = e;
     #else
       UNUSED(extruder);

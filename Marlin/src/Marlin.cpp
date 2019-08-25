@@ -65,7 +65,7 @@
   #include "feature/host_actions.h"
 #endif
 
-#if USE_BEEPER
+#if HAS_BUZZER && DISABLED(LCD_USE_I2C_BUZZER)
   #include "libs/buzzer.h"
 #endif
 
@@ -702,7 +702,7 @@ void idle(
     print_job_timer.tick();
   #endif
 
-  #if USE_BEEPER
+  #if HAS_BUZZER && DISABLED(LCD_USE_I2C_BUZZER) && DISABLED(PCA9632_BUZZER)
     buzzer.tick();
   #endif
 
@@ -884,10 +884,6 @@ void setup() {
 
   #if HAS_FILAMENT_SENSOR
     runout.setup();
-  #endif
-
-  #if ENABLED(POWER_LOSS_RECOVERY)
-    recovery.setup();
   #endif
 
   setup_killpin();

@@ -189,6 +189,7 @@ void TMC26XStepper::start() {
   pinMode(step_pin, OUTPUT);
   pinMode(dir_pin, OUTPUT);
   pinMode(cs_pin, OUTPUT);
+  //SET_OUTPUT(STEPPER_ENABLE_PIN);
   extDigitalWrite(step_pin, LOW);
   extDigitalWrite(dir_pin, LOW);
   extDigitalWrite(cs_pin, HIGH);
